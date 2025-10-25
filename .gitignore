@@ -1,5 +1,60 @@
+# Ignore environment settings
 .env
-venv
-*.pyc
+.env.*
+# Virtual environments
+venv/
+.venv/
+ENV/
+env/
+
+# Python bytecode
 __pycache__/
+*/__pycache__/
+*.py[cod]
+*.pyc
+
+# SQLite database
+# Keep local DB out of the repo
+*.sqlite3
+db.sqlite3
+scrapper/db.sqlite3
+
+# Django
+*.log
+
+# Playwright browsers / cache
+.playwright/
+
+# Editor / OS files
+.DS_Store
+.vscode/
+Thumbs.db
+
+# Distribution / packaging
+pip-wheel-metadata/
+*.egg-info/
+
+# Test / coverage
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Project resources (large binaries)
+scrapper/ressources/*.pdf
+
+# Docker ignore fallback (keep local env files out)
+.env
+
+# Misc caches
+.cache/
+.mypy_cache/
+__pycache__/
+
+# Ignore specific file
 scrapper/script_test.py
+scrapper/JobSearch/migrations/*
+scrapper/users/migrations/*
+scrapper/scrapper/migrations/*
+
+#static
+scrapper/ressources/

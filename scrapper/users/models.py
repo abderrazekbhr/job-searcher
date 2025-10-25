@@ -12,15 +12,3 @@ class User(models.Model):
     
     class Meta:
         db_table = 'users'
-
-
-class Profile(models.Model):
-    name = models.CharField(max_length=100)
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
-    bio = models.TextField(blank=True, null=True)
-    
-    def __str__(self):
-        return f"{self.user.username}'s Profile"
-
-    class Meta:
-        db_table = 'profiles'

@@ -1,21 +1,26 @@
 from django.shortcuts import render
 from django.http import HttpResponse
-
 from .service import UserService
 user_service = UserService()
 
+from rest_framework.decorators import api_view
+from rest_framework.response import Response
+from rest_framework import status
+
+
+@api_view["POST"]
 def create_user(request):
-    if request.method == 'POST':
-        # Assuming request.POST is a dictionary-like object with user data
-        user_data = {
-            'username': request.POST.get('username'),
-            'email': request.POST.get('email'),
-            'first_name': request.POST.get('first_name'),
-            'last_name': request.POST.get('last_name')
-        }
-        user = user_service.create_user(user_data)
-        return HttpResponse(f"User {user.username} created successfully.")
-    return HttpResponse("Only POST method is allowed.")
+    # Assuming request.POST is a dictionary-like object with user data
+    user_data = {
+        'username': request.POST.get('username'),
+        'email': request.POST.get('email'),
+        'first_name': request.POST.get('first_name'),
+        'last_name': request.POST.get('last_name')
+    }
+    user = user_service.create_user(user_data)
+    return Response(
+        
+    )
 
 
 def user_list(request):

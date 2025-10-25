@@ -15,7 +15,7 @@ def load_cv_from_file(file_path: str) -> str:
 Generate relevant job titles from CV content
 """
 def defined_job_titles():
-    cv_content = load_cv_from_file("files/CV_Abderrazek BELHAJ RHOUMA.pdf")
+    cv_content = load_cv_from_file("ressources/CV_Abderrazek BELHAJ RHOUMA.pdf")
     generated = generate(prompt = f"""
 Analyze the following CV content and identify 10 relevant job titles based on the skills, experience, and career focus described. Provide a diverse set of titles that best match the job roles and expertise. Include both common and specialized roles that may apply.
 
