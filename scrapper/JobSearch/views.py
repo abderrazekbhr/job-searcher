@@ -1,9 +1,9 @@
 from django.shortcuts import render
-from JobSearch.service import defined_job_titles
+from JobSearch.services.apec import defined_job_titles
 from rest_framework import status
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
-from JobSearch.service import apec_job_search
+from JobSearch.services.apec import apec_job_search
 # Create your views here.
 @api_view(['GET'])
 def generate_job_titles_view(request):

@@ -1,7 +1,5 @@
-from time import sleep
-from playwright.sync_api import sync_playwright,Playwright
-from config.generative_ia import generate
 from pypdf import PdfReader
+from config.generative_ia import generate
 
 def load_cv_from_file(file_path: str) -> str:
     load_pdf= PdfReader(file_path)
@@ -59,71 +57,5 @@ Job Titles in English: [english_job_title1, english_job_title2, english_job_titl
         "en":job_titles_en,
         "fr":job_titles_fr
     }
-
-
-
-
-
-
-def fetch_page_content(pw: Playwright, uri: str) -> str:
-    browser = pw.chromium.launch(headless=False)
-    context = browser.new_context(viewport={"width": 1080, "height": 720})
-    page = context.new_page()
-    # go to url
-    page.goto(uri)
-    # get HTML
-    return (page, browser)
-
-def set_filter(page:Playwright,selector:str,value:str):
-    page.locator(selector).fill(value)
-    
-def remove_cookie_banner(page:Playwright):
-    if page.locator("button:has-text('Refuser tous les cookies')").is_visible():
-        page.locator("button:has-text('Refuser tous les cookies')").click()
-    return page
-
-def apply_filters(page:Playwright):
-    page=remove_cookie_banner(page)
-    jobs=defined_job_titles()
-    set_filter(page,"input[name='keywords']",jobs['fr'][0])
-    page.locator("select[name='typeContrat']").select_option(label="CDI")
-    page.locator("select[name='niveauExperience']").select_option(label="Débutant")
-    page.locator("select[name='dateParution']").select_option(label="Dernières 24h")
-    page.locator("button:has-text('Rechercher')").click()
-    sleep(1)
-    return extract_job_uri_apec(page)
-
-    
-    
-
-def extract_job_uri_apec(page: Playwright) -> dict:
-    links = page.locator('a[href^="/candidat/recherche-emploi.html/emploi/detail-offre/"]')
-    uri_jobs=[links.nth(i).get_attribute('href') for i in range(links.count())]
-    while pass_next_page(page):
-        links = page.locator('a[href^="/candidat/recherche-emploi.html/emploi/detail-offre/"]')
-        uri_jobs.extend([links.nth(i).get_attribute('href') for i in range(links.count())])
-    return uri_jobs
-
-def pass_next_page(page: Playwright):
-    
-    if page.locator("a.page-link", has_text="Suiv.").is_visible():
-        print(f"""page :{
-            page.locator("a.page-link", has_text="Suiv.").get_attribute('href')
-            }""")
-        # print(f"page :{str(page.url())}")
-        # page_number= page.url().split("page=")[-1]
-
-        page.locator("a.page-link", has_text="Suiv.").click()
-        return True
-    return False
-
-
-def apec_job_search():
-    with sync_playwright() as pw:
-        page, browser = fetch_page_content(pw,"https://www.apec.fr/candidat/recherche-emploi.html/emploi/recherche-avancee")
-        content=apply_filters(page)
-        browser.close()
-        return content
-
 
 

@@ -1,25 +1,24 @@
 from django.shortcuts import render
 from django.http import HttpResponse
 from .service import UserService
+from users.models import User
 user_service = UserService()
 
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
+from rest_framework.request import Request
 from rest_framework import status
 
 
-@api_view["POST"]
-def create_user(request):
-    # Assuming request.POST is a dictionary-like object with user data
-    user_data = {
-        'username': request.POST.get('username'),
-        'email': request.POST.get('email'),
-        'first_name': request.POST.get('first_name'),
-        'last_name': request.POST.get('last_name')
-    }
-    user = user_service.create_user(user_data)
-    return Response(
+@api_view(["POST"])
+def create_user(request:Request):
+    
+    User.objects.create(
         
+    )
+    return Response(
+        data=request.data.get("name","None"),
+        status=status.HTTP_200_OK    
     )
 
 
