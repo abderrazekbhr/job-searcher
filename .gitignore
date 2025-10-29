@@ -17,7 +17,7 @@ __pycache__/
 # Keep local DB out of the repo
 *.sqlite3
 db.sqlite3
-scrapper/db.sqlite3
+back-scrapper/db.sqlite3
 
 # Django
 *.log
@@ -40,7 +40,7 @@ pip-wheel-metadata/
 htmlcov/
 
 # Project resources (large binaries)
-scrapper/ressources/*.pdf
+back-scrapper/ressources/*.pdf
 
 # Docker ignore fallback (keep local env files out)
 .env
@@ -51,10 +51,12 @@ scrapper/ressources/*.pdf
 __pycache__/
 
 # Ignore specific file
-scrapper/script_test.py
-scrapper/JobSearch/migrations/*
-scrapper/users/migrations/*
-scrapper/scrapper/migrations/*
-
+back-scrapper/script_test.py
+back-scrapper/JobSearch/migrations/*
+back-scrapper/users/migrations/*
+back-scrapper/scrapper/migrations/*
 #static
-scrapper/ressources/
+back-scrapper/ressources/
+
+.github/instructions/kluster-code-verify.instructions.md
+.kluster
