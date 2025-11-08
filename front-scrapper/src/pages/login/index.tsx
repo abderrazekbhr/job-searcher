@@ -1,13 +1,9 @@
 import React, { JSX, useEffect, useRef, useState } from "react";
 import { FormState } from "./types";
 import { captchaUtils } from "./helper";
-
-// LoginPage.tsx
-// A single-file React + TypeScript login page using Tailwind CSS
-// - Email + password form
-// - Client-side CAPTCHA rendered to a canvas with distortion & noise
-// - Accessibility labels, validation, and nice small UI touches
-
+import { axiosConnection } from "../../utils/axiosConnection";
+import { Link } from "react-router";
+import { routersObject } from "../../router/route";
 export default function Login() {
   const [form, setForm] = useState<FormState>({
     email: "",
@@ -87,6 +83,10 @@ export default function Login() {
     }
   };
 
+  const login = () => {
+    axiosConnection.post();
+  };
+
   return (
     <div className="h-screen w-full bg-gradient-to-tr from-slate-50 to-sky-50 flex items-center justify-center p-6">
       <div className="max-w-md w-full bg-white/80 backdrop-blur-md border border-slate-200 rounded-2xl shadow-xl p-8">
@@ -141,7 +141,6 @@ export default function Login() {
               className="mt-1 block w-full rounded-lg border border-slate-200 px-3 py-2 shadow-sm placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-sky-400"
               placeholder="Enter your password"
             />
-            <p className="mt-1 text-xs text-slate-400">Minimum 8 characters</p>
           </div>
 
           <div className="pt-2">
@@ -176,17 +175,6 @@ export default function Login() {
                     className="text-xs px-2 py-1 rounded-md bg-slate-100 hover:bg-slate-200 border border-slate-200"
                   >
                     Refresh CAPTCHA
-                  </button>
-
-                  <button
-                    type="button"
-                    onClick={() =>
-                      setCaptcha(captchaUtils.scrambleCaptcha(captcha))
-                    }
-                    className="text-xs px-2 py-1 rounded-md bg-slate-100 hover:bg-slate-200 border border-slate-200"
-                    title="Scramble letter positions"
-                  >
-                    Scramble
                   </button>
                 </div>
               </div>
@@ -242,7 +230,12 @@ export default function Login() {
         <footer className="mt-6 text-center text-sm text-slate-500">
           <p>
             New here?{" "}
-            <a className="text-sky-600 underline">Create an account</a>
+            <Link
+              to={routersObject.register}
+              className="text-sky-600 underline"
+            >
+              Create an account
+            </Link>
           </p>
         </footer>
       </div>

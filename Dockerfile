@@ -2,8 +2,8 @@ FROM python:3.10-slim
 
 WORKDIR /app
 
-COPY . /app/
-
+COPY back-scrapper /app/
+COPY requirements.txt /app/
 EXPOSE 8000
 
 RUN apt-get update && \

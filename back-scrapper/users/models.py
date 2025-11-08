@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
 from JobSearch.models import Job
+
 # Create a custom User model that extends AbstractUser
 class User(AbstractUser):
     email = models.EmailField(unique=True)  # Make email the unique identifier

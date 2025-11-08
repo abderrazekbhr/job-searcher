@@ -2,7 +2,7 @@ import { JSX } from "react"
 import Login from "../pages/login/index"
 import RegisterPage from "../pages/register"
 import { Main } from "../pages/main"
-const routers = {
+export const routersObject = {
   home: "/",
   login: "/login",
   register: "/register"
@@ -20,12 +20,12 @@ export const appRoutes: RouteComposent[] = [
     children:
       [{
         component: Login,
-        path: routers.login,
+        path: routersObject.login,
         children: [],
       },
       {
         component: RegisterPage,
-        path: routers.register,
+        path: routersObject.register,
         children: [],
       },]
   }

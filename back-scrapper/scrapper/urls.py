@@ -17,7 +17,7 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path,include
 from scrapper import views
-from django.conf.urls import handler404
+# from django.conf.urls import handler404
 
 from drf_spectacular.views import (
     SpectacularAPIView,
@@ -28,11 +28,12 @@ from drf_spectacular.views import (
 
 
 #redirect to docs swagger 
-handler404 = 'scrapper.views.redirect_to_swagger'
+# handler404 = 'scrapper.views.redirect_to_swagger'
 
 urlpatterns = [
     path('admin/', admin.site.urls), 
     path("api/v1/users/", include("users.urls")),
+    path('api/v1/job-search/', include('JobSearch.urls')),
     path('api/v1/job-search/', include('JobSearch.urls')),
     
     path('api/schema/', SpectacularAPIView.as_view(), name='schema'),

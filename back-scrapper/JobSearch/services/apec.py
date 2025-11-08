@@ -4,8 +4,11 @@ from playwright.sync_api import sync_playwright,Playwright
 from JobSearch.models import Job,Entreprise
 from config.generative_ia import generate
 from JobSearch.services.shared import defined_job_titles
-BASE_URI="https://www.apec.fr"
+import threading
+from concurrent.futures import ThreadPoolExecutor, as_completed
+import pprint
 
+BASE_URI="https://www.apec.fr"
 
 def init_scrapper(pw: Playwright, uri: str) -> str:
     browser = pw.chromium.launch(headless=True)
@@ -26,8 +29,8 @@ def remove_cookie_banner(page:Playwright):
 
 def apply_filters(page:Playwright):
     page=remove_cookie_banner(page)
-    jobs=defined_job_titles()
-    set_filter(page,"input[name='keywords']",jobs['fr'][0])
+    # jobs=defined_job_titles()
+    set_filter(page,"input[name='keywords']","Développeur Full Stack")
     page.locator("select[name='typeContrat']").select_option(label="CDI")
     page.locator("select[name='niveauExperience']").select_option(label="Débutant")
     page.locator("select[name='dateParution']").select_option(label="Dernières 24h")
@@ -35,23 +38,27 @@ def apply_filters(page:Playwright):
     sleep(1)
     return extract_job_uri_apec(page)
 
-    
-    
 
 def extract_job_uri_apec(page: Playwright) -> dict:
     links = page.locator('a[href^="/candidat/recherche-emploi.html/emploi/detail-offre/"]')
     uri_jobs:List[str]=[links.nth(i).get_attribute('href') for i in range(links.count())]
+    
     while pass_next_page(page):
         links = page.locator('a[href^="/candidat/recherche-emploi.html/emploi/detail-offre/"]')
-        uri_jobs.extend([links.nth(i).get_attribute('href') for i in range(links.count())])
-
-    all_posts_data=extract_job_data(page,uri_jobs)
+        if links.count() > 0:
+            for i in range(links.count()):
+                url=links.nth(i).get_attribute('href')
+                uri_jobs.extend([url])
+        else:
+            break
     
-    return uri_jobs
+    all_posts_data=extract_job_data(page, uri_jobs)
+
+    return all_posts_data
 
 
-def extract_job_data(page: Playwright,jobs_uris:List[str]):
-    
+def extract_job_data(page: Playwright,jobs_uris:List[str])-> List[dict]:
+    results=[]
     for uri in jobs_uris:
         page.goto(
             BASE_URI+uri
@@ -63,19 +70,21 @@ def extract_job_data(page: Playwright,jobs_uris:List[str]):
         description_div=page.locator(".details-post").all()
         job_object={
             "title":page.locator("h1").text_content(),    
-            "experience_level":description_div[2].text_content(),
+            "experience_level": description_div[2].text_content() if len(description_div)>2 else "Not Specified",
             "published_date":page.locator(".date-offre.mb-10").text_content(),
-            "enterprise":list_detail_offre[0],
+            "enterprise":list_detail_offre[0] if len(description_div)>1 else "Not Specified",
             "platform":"APEC",
-            "location":list_detail_offre[2],
-            "contract_type":list_detail_offre[1],
-            "salary":description_div[0].text_content(),
+            "location":list_detail_offre[2] if len(list_detail_offre)>2 else "Not Specified",
+            "contract_type":list_detail_offre[1] if len(list_detail_offre)>1 else "Not Specified",
+            "salary":description_div[0].text_content() if len(description_div)>1 else "Not Specified",
             "link":BASE_URI+uri,
-            "skill":extract_job_hard_skills,
-            "other_details":description_div[-1].text_content()
+            # "skill":extract_job_hard_skills,
+            "other_details":description_div[-1].text_content() if len(description_div)>1 else "Not Specified"
         }
+        pprint.pprint(job_object)
+        results.append(job_object)
+    return results
         
-        print(job_object)
                 
 def extract_job_hard_skills(description:str)-> list[str]:
     generate(
@@ -103,6 +112,7 @@ Job description: {description}
 def pass_next_page(page: Playwright):
     if page.locator("a.page-link", has_text="Suiv.").is_visible():
         page.locator("a.page-link", has_text="Suiv.").click()
+        sleep(1) 
         return True
     return False
 
