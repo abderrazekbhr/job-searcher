@@ -1,0 +1,30 @@
+
+### sign up user
+POST http://127.0.0.1:8000/api/v1/users/sign-up
+Content-Type: application/json
+
+{
+    "username": "abderrazekbhr1",
+    "email": "abderrazekbhr1@gmail.com",
+    "password": "TestPassword123",
+    "first_name": "abderazek",
+    "last_name": "belhaj rhouma"
+}
+
+### login user
+POST http://127.0.0.1:8000/api/v1/users/login
+Content-Type: application/json
+
+{
+    "email": "abderrazekbhr1@gmail.com",
+    "password": "TestPassword123"
+}
+
+
+### Confirm user account
+
+GET http://127.0.0.1:8000/api/v1/users/confirm/b577dc7b94f44b4f9614e0c1de2be04c
+Content-Type: application/json
+Authorization: Token ff88d1b38bb39bed10a716cf9a080874126262f2
+
+

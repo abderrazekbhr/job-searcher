@@ -1,6 +1,8 @@
 # Ignore environment settings
 .env
 .env.*
+.env.database
+
 # Virtual environments
 venv/
 .venv/
@@ -60,3 +62,6 @@ back-scrapper/ressources/
 
 .github/instructions/kluster-code-verify.instructions.md
 .kluster
+
+#other files
+redis-data/dump.rdb

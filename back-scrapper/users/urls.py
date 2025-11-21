@@ -1,8 +1,14 @@
 from django.urls import path
-from .views import user_profile,create_user,send_mail_page
+from rest_framework.authtoken.views import obtain_auth_token 
+from .views import CreateUsers,login,confirm_creation,ListUsers,DeleteUsers,UpdateUsers,DeleteMultipleUsers,CacheContent
+
 # Create your views here.
 urlpatterns = [
-    path('list/', user_profile, name='user_list'),
-    path('create/', create_user, name='create_user'),
-    path("send_mail/",send_mail_page,name="test for sending mails")
+    path("login",login,name="login user"),
+    path('sign-up', CreateUsers.as_view(), name='user_list'),
+    path('confirm/<str:user_key>', confirm_creation, name='confirm_creation'),
+    path('', ListUsers.as_view(), name='user_list'),
+    path('<int:pk>', DeleteUsers.as_view(), name='user_delete'),
+    path('<int:pk>', UpdateUsers.as_view(), name='user_update'),
+    path('get_all_cache',CacheContent.as_view() ),
 ]

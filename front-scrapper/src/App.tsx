@@ -1,12 +1,15 @@
-import React from "react";
-import logo from "./logo.svg";
 import "./App.css";
-import Login from "./pages/login";
-import RegisterPage from "./pages/register";
+import { Navbar } from "./components/navbar";
+import { MainRouter } from "./router";
+import { Button } from "@/components/ui/button";
+import { NavigationMenu } from "@/components/ui/navigation-menu";
 
 function App() {
-  return <RegisterPage></RegisterPage>;
-  // return <Login></Login>;
+  return (
+    <>
+      <MainRouter></MainRouter>;
+    </>
+  );
 }
 
 export default App;

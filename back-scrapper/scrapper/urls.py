@@ -34,10 +34,7 @@ urlpatterns = [
     path('admin/', admin.site.urls), 
     path("api/v1/users/", include("users.urls")),
     path('api/v1/job-search/', include('JobSearch.urls')),
-    path('api/v1/job-search/', include('JobSearch.urls')),
-    
     path('api/schema/', SpectacularAPIView.as_view(), name='schema'),
-
     # Swagger UI
     path('api/docs/swagger/', SpectacularSwaggerView.as_view(url_name='schema'), name='swagger-ui'),
     # Redoc

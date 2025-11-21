@@ -1,35 +1,147 @@
-import React from "react";
+import React, { JSX, useContext, useEffect, useState } from "react";
+import { Home, Settings, FileText, Moon, Sun } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Avatar } from "@/components/ui/avatar";
+import { Separator } from "@/components/ui/separator";
 import { Link } from "react-router";
-export function Sidebar() {
+import { ThemeProviderContext, useTheme } from "../ui/theme-provider";
+
+type NavKey = "dashboard" | "settings" | "cv";
+
+interface SidebarProps {
+  initial?: NavKey;
+}
+
+export default function Sidebar({ initial = "dashboard" }: SidebarProps) {
+  const [active, setActive] = useState<NavKey>(initial);
+  const { theme, setTheme } = useContext(ThemeProviderContext);
+  // const [dark, setDark] = useState<boolean>(() =>
+  //   typeof window !== "undefined"
+  //     ? document.documentElement.classList.contains("dark")
+  //     : false
+  // );
+
+  // useEffect(() => {
+  //   // keep html.dark in sync
+  //   if (dark) document.documentElement.classList.add("dark");
+  //   else document.documentElement.classList.remove("dark");
+  // }, [dark]);
+
+  // function navigate(key: NavKey) {
+  //   setActive(key);
+  //   onNavigate?.(key);
+  // }
+
+  const navItemBase =
+    "flex items-center gap-3 px-3 py-2 rounded-md transition-colors text-sm font-medium focus:outline-none focus:ring-2 focus:ring-offset-2";
+
+  const navItemActive =
+    "bg-sky-50 text-sky-700 dark:bg-sky-900/30 dark:text-sky-300 ring-1 ring-sky-100 dark:ring-sky-800";
+
+  const navItemInactive =
+    "text-slate-700 hover:bg-slate-100 dark:text-slate-300 dark:hover:bg-slate-800/60";
+
   return (
     <aside
-      id="default-sidebar"
-      className="z-40 w-64 h-screen transition-transform -translate-x-full sm:translate-x-0"
-      aria-label="Sidebar"
+      className={`w-72 min-w-[18rem] h-screen flex flex-col justify-between bg-white dark:bg-slate-900 border-r border-slate-200 dark:border-slate-800 p-4 `}
+      aria-label="Primary navigation"
     >
-      <div className="h-full px-3 py-4 overflow-y-auto bg-gray-50 dark:bg-gray-800">
-        <ul className="space-y-2 font-medium">
-          <li>
-            <Link
-              to={"/"}
-              className="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group"
+      <div>
+        <div className="flex items-center gap-3 px-1 py-2">
+          <Avatar className="h-10 w-10">
+            <div className="flex items-center justify-center h-full w-full rounded-full bg-sky-600 text-white">
+              JD
+            </div>
+          </Avatar>
+          <div>
+            <p className="text-sm font-semibold text-slate-900 dark:text-slate-100">
+              John Doe
+            </p>
+            <p className="text-xs text-slate-500 dark:text-slate-400">
+              Product Designer
+            </p>
+          </div>
+        </div>
+
+        <Separator className="my-3" />
+
+        <nav className="flex flex-col gap-2" role="navigation">
+          <Link
+            to="/dashboard"
+            onClick={() => setActive("dashboard")}
+            className={`${navItemBase} ${
+              active === "dashboard" ? navItemActive : navItemInactive
+            }`}
+            aria-current={active === "dashboard" ? "page" : undefined}
+          >
+            <Home className="h-4 w-4" />
+            <span>Dashboard</span>
+          </Link>
+
+          <Link
+            to="/cv"
+            onClick={() => setActive("cv")}
+            className={`${navItemBase} ${
+              active === "cv" ? navItemActive : navItemInactive
+            }`}
+            aria-current={active === "cv" ? "page" : undefined}
+          >
+            <FileText className="h-4 w-4" />
+            <span>CV / Cover Letter</span>
+          </Link>
+
+          <Link
+            to="/settings"
+            className={`${navItemBase} ${
+              active === "settings" ? navItemActive : navItemInactive
+            }`}
+            aria-current={active === "settings" ? "page" : undefined}
+            onClick={() => setActive("settings")}
+          >
+            <Settings className="h-4 w-4" />
+            <span>Settings</span>
+          </Link>
+        </nav>
+      </div>
+
+      <div className="mt-4">
+        <Separator className="my-3" />
+
+        <div className="flex items-center justify-between gap-3">
+          <div className="flex items-center gap-3">
+            <div className="hidden sm:block">
+              <p className="text-xs text-slate-500 dark:text-slate-400">
+                Appearance
+              </p>
+              <p className="text-sm font-medium text-slate-700 dark:text-slate-200">
+                Theme
+              </p>
+            </div>
+          </div>
+
+          <div className="flex items-center gap-2">
+            <Button
+              aria-label="toggle theme"
+              title={theme === "dark" ? "Switch to light" : "Switch to dark"}
+              onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
+              className="p-2 rounded-md hover:bg-slate-100 dark:hover:bg-slate-800/60 focus:outline-none focus:ring-2 focus:ring-sky-400"
             >
-              <svg
-                className="shrink-0 w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white"
-                aria-hidden="true"
-                xmlns="http://www.w3.org/2000/svg"
-                fill="currentColor"
-                viewBox="0 0 20 20"
-              >
-                <path d="m17.418 3.623-.018-.008a6.713 6.713 0 0 0-2.4-.569V2h1a1 1 0 1 0 0-2h-2a1 1 0 0 0-1 1v2H9.89A6.977 6.977 0 0 1 12 8v5h-2V8A5 5 0 1 0 0 8v6a1 1 0 0 0 1 1h8v4a1 1 0 0 0 1 1h2a1 1 0 0 0 1-1v-4h6a1 1 0 0 0 1-1V8a5 5 0 0 0-2.582-4.377ZM6 12H4a1 1 0 0 1 0-2h2a1 1 0 0 1 0 2Z" />
-              </svg>
-              <span className="flex-1 ms-3 whitespace-nowrap">Inbox</span>
-              <span className="inline-flex items-center justify-center w-3 h-3 p-3 ms-3 text-sm font-medium text-blue-800 bg-blue-100 rounded-full dark:bg-blue-900 dark:text-blue-300">
-                3
-              </span>
-            </Link>
-          </li>
-        </ul>
+              {theme === "dark" ? (
+                <Sun className="h-4 w-4 text-yellow-400" />
+              ) : (
+                <Moon className="h-4 w-4 text-slate-700" />
+              )}
+            </Button>
+          </div>
+        </div>
+
+        <div className="mt-3 flex items-center justify-between gap-3">
+          <Link to="#" className="w-full" onClick={() => alert("Sign out")}>
+            Log out
+          </Link>
+        </div>
+
+        <p className="mt-4 text-xs text-slate-400">Version 1.0.0</p>
       </div>
     </aside>
   );
