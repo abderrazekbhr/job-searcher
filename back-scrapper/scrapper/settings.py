@@ -45,7 +45,7 @@ INSTALLED_APPS = [
     
     "drf_spectacular",
     'users',
-    "JobSearch",
+    "job",
     
 ]
 
@@ -203,3 +203,32 @@ EMAIL_USE_TLS = True
 EMAIL_PORT = 587
 EMAIL_HOST_USER = os.getenv("EMAIL_HOST_USER")
 EMAIL_HOST_PASSWORD =os.getenv("EMAIL_HOST_PASSWORD")
+
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,   # keep Django default loggers
+    'formatters': {
+        'simple': {
+            'format': '{levelname} {asctime} {name}: {message}',
+            'style': '{',
+        },
+    },
+    'handlers': {
+        'console': {
+            'class': 'logging.StreamHandler',
+            'formatter': 'simple',
+        },
+    },
+    'loggers': {
+        '': {  # root logger
+            'handlers': ['console'],
+            'level': 'DEBUG',
+        },
+        'django': {
+            'handlers': ['console'],
+            'propagate': False,
+            'level': 'INFO',
+        },
+    },
+}

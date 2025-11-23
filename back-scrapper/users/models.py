@@ -1,6 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
-from JobSearch.models import Job
+from job.models import Job
 
 # Create a custom User model that extends AbstractUser
 class User(AbstractUser):

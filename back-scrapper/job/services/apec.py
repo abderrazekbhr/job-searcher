@@ -1,9 +1,9 @@
 from time import sleep
 from typing import List
 from playwright.sync_api import sync_playwright,Playwright
-from JobSearch.models import Job,Entreprise
-from config.generative_ia import generate
-from JobSearch.services.shared import defined_job_titles
+from job.models import Job,Entreprise
+from .shared import llm
+from job.services.shared import defined_job_titles
 import threading
 from concurrent.futures import ThreadPoolExecutor, as_completed
 import pprint
@@ -33,7 +33,7 @@ def apply_filters(page:Playwright):
     set_filter(page,"input[name='keywords']","Développeur Full Stack")
     page.locator("select[name='typeContrat']").select_option(label="CDI")
     page.locator("select[name='niveauExperience']").select_option(label="Débutant")
-    page.locator("select[name='dateParution']").select_option(label="Dernières 24h")
+    # page.locator("select[name='dateParution']").select_option(label="Dernières 24h")
     page.locator("button:has-text('Rechercher')").click()
     sleep(1)
     return extract_job_uri_apec(page)
@@ -52,7 +52,7 @@ def extract_job_uri_apec(page: Playwright) -> dict:
         else:
             break
     
-    all_posts_data=extract_job_data(page, uri_jobs)
+    all_posts_data=extract_job_data(page, uri_jobs[0:2])
 
     return all_posts_data
 
@@ -72,7 +72,7 @@ def extract_job_data(page: Playwright,jobs_uris:List[str])-> List[dict]:
             "title":page.locator("h1").text_content(),    
             "experience_level": description_div[2].text_content() if len(description_div)>2 else "Not Specified",
             "published_date":page.locator(".date-offre.mb-10").text_content(),
-            "enterprise":list_detail_offre[0] if len(description_div)>1 else "Not Specified",
+            "enterprise":list_detail_offre[0] if len(list_detail_offre)>1 else "Not Specified",
             "platform":"APEC",
             "location":list_detail_offre[2] if len(list_detail_offre)>2 else "Not Specified",
             "contract_type":list_detail_offre[1] if len(list_detail_offre)>1 else "Not Specified",
@@ -87,27 +87,10 @@ def extract_job_data(page: Playwright,jobs_uris:List[str])-> List[dict]:
         
                 
 def extract_job_hard_skills(description:str)-> list[str]:
-    generate(
-    f"""Based on the following job description, extract the required soft skills and hard skills.
-
-Return the result strictly in the following JSON structure — no explanations, no extra text:
-
-{
-  "soft_skills": [
-    "list of soft skills here"
-  ],
-  "hard_skills": [
-    "list of hard skills here"
-  ]
-}
-
-Job description: {description}
-    """
-    )
+    PROMPT_NAME="extract_skills"
+    return llm.generate(prompt_name=PROMPT_NAME, description=description)
     
     
-    
-
 
 def pass_next_page(page: Playwright):
     if page.locator("a.page-link", has_text="Suiv.").is_visible():

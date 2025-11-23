@@ -1,5 +1,8 @@
 import scrapy
 from config.generative_ia import generate
+from datetime import datetime
+from job.models import Entreprise
+from django.shortcuts import get_object_or_404
 
 BASE_URI="https://www.apec.fr"
 
@@ -20,14 +23,47 @@ class ApecJobSpider(scrapy.Spider):
             print(f"Queuing URL: {url}")
             # Each URL triggers the parse method when the response is received
             yield scrapy.Request(url=url, callback=self.parse)
+            
+    
 
+    # TODO
+    def __validate_date(self,date:str)->datetime:
+        start=date.find("Publiée le ")
+        if start!=-1:
+            date=date[start+len(date):]
+            converted_date = datetime.strptime(date, '%d/%m/%y')
+            return converted_date
+        else:
+            datetime.today().strftime('%Y-%m-%d') 
+        
+    # TODO
+    def __validate_entreprise(self,entreprise:str,location:str)->Entreprise:
+        try:
+            data=Entreprise.objects.get(name=entreprise)
+            return data            
+        except:
+            new_entreprise=Entreprise(
+                name=entreprise,
+                location=location
+                
+            )
+        
+
+    # TODO
+    def _generate_skills(self,details:str):
+        pass
+    
+    # TODO
+    
+    
+    
     # Main parsing method for each response
     def parse(self, response):
         """
         Parse a job detail page from APEC and extract key information.
         """
         print(f"Scraping URL: {response.url}")
-        print(response.css("h1::text").get(default="").strip())
+        print(response.css("h1::text").get(defaultq="").strip())
         # Extract job details from the "details-offer-list" section
         list_detail_offre = response.css(".details-offer-list li::text").getall()
         list_detail_offre = [item.strip() for item in list_detail_offre]
@@ -40,7 +76,7 @@ class ApecJobSpider(scrapy.Spider):
         job_object = {
             "title": response.css("h1::text").get(default="").strip(),
             "experience_level": response.css(".details-post > div:nth-child(3)::text").get(default="").strip(),
-            "published_date": response.css(".date-offre.mb-10::text").get(default="").strip(),
+            "published_date": self.__validate_date(response.css(".date-offre.mb-10::text").get(default="").strip()),
             "enterprise": list_detail_offre[0] if len(list_detail_offre) > 0 else None,
             "platform": "APEC",
             "contract_type": list_detail_offre[1] if len(list_detail_offre) > 1 else None,
@@ -53,7 +89,7 @@ class ApecJobSpider(scrapy.Spider):
         # Append the job to the results list
         self.results.append(job_object)
 
-    def extract_job_hard_skills(description:str)-> list[str]:
+    def extract_job_hard_skills(self,description:str)-> list[str]:
         generate(
             f"""Based on the following job description, extract the required soft skills and hard skills.
         Return the result strictly in the following JSON structure — no explanations, no extra text:
@@ -65,7 +101,6 @@ class ApecJobSpider(scrapy.Spider):
             "list of hard skills here"
         ]
         }
-
         Job description: {description}
             """
             )

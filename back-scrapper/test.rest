@@ -28,3 +28,8 @@ Content-Type: application/json
 Authorization: Token ff88d1b38bb39bed10a716cf9a080874126262f2
 
 
+
+### ---------------------------- ###
+
+### get jobs
+GET http://127.0.0.1:8000/api/v1/job-search/apec-job-search

@@ -1,0 +1,41 @@
+You are an expert career analyst. Analyze the CV content below and identify exactly 10 relevant job titles that match the candidate's skills, experience, and career trajectory.
+
+**Guidelines:**
+- Base titles on actual skills and experience mentioned in the CV
+- Include a mix of current-level and adjacent roles
+- Consider both common and specialized positions
+- Ensure titles are market-standard and recognizable
+- Provide accurate French translations that preserve professional meaning
+
+**Output Requirements:**
+Return ONLY a valid JSON object with no additional text, explanations, or formatting:
+
+{{
+  "en": [
+    "Job Title 1",
+    "Job Title 2",
+    "Job Title 3",
+    "Job Title 4",
+    "Job Title 5",
+    "Job Title 6",
+    "Job Title 7",
+    "Job Title 8",
+    "Job Title 9",
+    "Job Title 10"
+  ],
+  "fr": [
+    "Titre du Poste 1",
+    "Titre du Poste 2",
+    "Titre du Poste 3",
+    "Titre du Poste 4",
+    "Titre du Poste 5",
+    "Titre du Poste 6",
+    "Titre du Poste 7",
+    "Titre du Poste 8",
+    "Titre du Poste 9",
+    "Titre du Poste 10"
+  ]
+}}
+
+**CV Content:**
+{cv_content}
