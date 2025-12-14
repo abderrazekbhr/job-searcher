@@ -1,13 +1,35 @@
-# Job Searcher - Automated Job Search Assistant
+# Django Job Scraper & Application Manager
 
-A Django-based web application that automates job searching by analyzing CVs, generating relevant job titles, and scraping job postings from employment websites using AI-powered analysis.
+A comprehensive Django REST API application that automates job scraping from APEC (French job board), enriches job data using AI, and manages user applications with cover letter generation capabilities.
 
-## 🌟 Features
+## 📋 Overview
 
-- **CV Analysis**: Automatically extracts relevant information from PDF CVs
-- **Job Title Generation**: Uses AI to generate relevant job titles based on CV content
-- **Automated Job Search**: Scrapes job postings from APEC with customizable filters
-- **Multi-language Support**: Handles both English and French job titles
+This application provides an intelligent job search platform that:
+- Scrapes job postings from APEC using Playwright
+- Stores and manages job listings in a PostgreSQL database
+- Uses Google Gemini AI to extract skills and generate job titles from CVs
+- Generates personalized cover letters
+- Manages user accounts with email confirmation
+- Provides RESTful API endpoints with token-based authentication
+
+## ✨ Features
+
+### Job Scraping & Management
+- **APEC Job Scraper**: Automated scraping of job postings with configurable filters (keywords, contract type, experience level)
+- **Job Storage**: Persistent storage of job details including title, salary, location, skills, and company information
+- **AI Skill Extraction**: Uses Gemini AI to analyze job descriptions and extract required skills
+- **Cover Letter Generation**: Template-based cover letter creation with PDF CV parsing
+
+### User Management
+- **User Registration**: Account creation with email confirmation workflow
+- **Token Authentication**: Secure REST API access using DRF token authentication
+- **Profile Management**: User profiles with CV upload and job preferences
+- **Email Notifications**: Automated confirmation emails via Gmail SMTP
+
+### API & Documentation
+- **OpenAPI/Swagger Documentation**: Interactive API documentation using drf-spectacular
+- **RESTful Endpoints**: Well-structured API for users and job search operations
+- **CORS Support**: Configurable cross-origin resource sharing
 - **RESTful API**: Complete API documentation with Swagger UI
 - **Containerized**: Easy deployment with Docker
 
