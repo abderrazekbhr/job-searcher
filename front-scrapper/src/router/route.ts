@@ -21,35 +21,37 @@ type RouteComposent = {
 
 export const appRoutes: RouteComposent[] = [
   {
+    component: Login,
+    path: routersObject.login,
+    children: [],
+  },
+
+  {
+    component: RegisterPage,
+    path: routersObject.register,
+    children: [],
+  },
+
+  {
     component: Main,
     path: "/",
     children:
-      [{
-        component: Login,
-        path: routersObject.login,
-        children: [],
-      },
-
-      {
-        component: RegisterPage,
-        path: routersObject.register,
-        children: [],
-      },
-      {
-        component: Dashboard,
-        path: routersObject.dashboard,
-        children: []
-      },
-      {
-        component: CVAndCoverLetter,
-        path: routersObject.cv,
-        children: []
-      },
-      {
-        component: Settings,
-        path: routersObject.settings,
-        children: []
-      }
+      [
+        {
+          component: Dashboard,
+          path: routersObject.dashboard ,
+          children: []
+        },
+        {
+          component: CVAndCoverLetter,
+          path: routersObject.cv ,
+          children: []
+        },
+        {
+          component: Settings,
+          path: routersObject.settings,
+          children: []
+        }
 
       ]
   }

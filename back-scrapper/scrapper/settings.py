@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     
     'rest_framework.authtoken',
     'rest_framework',
+    'corsheaders',
     
     "drf_spectacular",
     'users',
@@ -57,6 +58,8 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
+    'django.middleware.common.CommonMiddleware',
 ]
 
 ROOT_URLCONF = 'scrapper.urls'
@@ -89,6 +92,28 @@ CACHES = {
 
 WSGI_APPLICATION = 'scrapper.wsgi.application'
 
+# CORS_ALLOWED_ORIGINS = [
+#     "http://localhost:3000",
+# ]
+
+CORS_ALLOW_ALL_ORIGINS = True
+
+
+CORS_ALLOW_METHODS = [
+    "GET",
+    "POST",
+    "PUT",
+    "PATCH",
+    "DELETE",
+    "OPTIONS"
+]
+
+
+CORS_ALLOW_HEADERS = [
+    "content-type",
+    "authorization",
+]
+
 
 # Database
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
@@ -112,11 +137,11 @@ REST_FRAMEWORK = {
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': os.getenv("POSTGRES_DB"),
-        'USER': os.getenv("POSTGRES_USER"),
-        'PASSWORD': os.getenv("POSTGRES_PASSWORD"),
+        'NAME': "mydatabase",
+        'USER': "postgres",
+        'PASSWORD': "admin",
         'HOST': '127.0.0.1',
-        'PORT': '5432',
+        'PORT': '5400',
     }
 }
 

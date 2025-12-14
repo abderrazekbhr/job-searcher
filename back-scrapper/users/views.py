@@ -5,18 +5,20 @@ from django.core.cache import cache
 from rest_framework.response import Response
 from rest_framework.request import Request
 from rest_framework import generics,status
-from rest_framework.decorators import api_view,permission_classes
 from rest_framework.permissions import AllowAny
 from rest_framework.views import APIView
+
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.authentication import TokenAuthentication
+from rest_framework.authtoken.models import Token
+from rest_framework.decorators import api_view,permission_classes
+
 from .serializer import RegisterDataSerializer
 from .permissions import IsStaffPermission
 from .services import UserService
 from .models import User
-from rest_framework.authtoken.models import Token
-user_service=UserService()
 
+user_service=UserService()
 
 @api_view(["GET"])
 @permission_classes([AllowAny])
@@ -29,7 +31,6 @@ def confirm_creation(request: Request,user_key:str):
         cache.delete(user_key)
         return Response("Account confirmed successfully",status=status.HTTP_200_OK)
     return Response("Invalid confirmation key",status=status.HTTP_400_BAD_REQUEST)
-
 
 
 @api_view(["POST"])
@@ -50,23 +51,25 @@ def login(request:Request):
     
     return Response("email and password are obligatory",status=status.HTTP_400_BAD_REQUEST)
 
+
 class CreateUsers(generics.CreateAPIView):
     serializer_class=RegisterDataSerializer
     queryset = User.objects.all()
     permission_classes=[AllowAny]
+
 
 class UpdateUsers(generics.UpdateAPIView):
     serializer_class=RegisterDataSerializer
     queryset = User.objects.all()
     permission_classes=[IsAuthenticated]
 
+
 class DeleteUsers(generics.DestroyAPIView):
-    serializer_class=RegisterDataSerializer
     queryset = User.objects.all()
     permission_classes=[IsAuthenticated,IsStaffPermission]
 
+
 class DeleteMultipleUsers(generics.DestroyAPIView):
-    serializer_class=RegisterDataSerializer
     queryset = User.objects.all()
     permission_classes=[AllowAny]
 
@@ -80,16 +83,13 @@ class DeleteMultipleUsers(generics.DestroyAPIView):
 
 
 class CacheContent(APIView):
-
     def get(self,request,  *args, **kwargs):
         return Response(cache.get(),status=status.HTTP_200_OK)
+
 
 class ListUsers(generics.ListAPIView):
     serializer_class=RegisterDataSerializer
     queryset = User.objects.all()
-    authentication_classes = [TokenAuthentication]   # FORCER le token ici
-    permission_classes = [IsAuthenticated]
-
-
-
+    authentication_classes = [TokenAuthentication]
+    permission_classes=[AllowAny]
 

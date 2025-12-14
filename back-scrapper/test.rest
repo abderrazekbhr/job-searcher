@@ -1,13 +1,14 @@
 
 ### sign up user
-POST http://127.0.0.1:8000/api/v1/users/sign-up
+POST http://127.0.0.1:8000/api/v1/users/sign-up/
 Content-Type: application/json
 
 {
-    "username": "abderrazekbhr1",
-    "email": "abderrazekbhr1@gmail.com",
+    "username": "sdqsfqsfsqdqsdqsdqsdqsdsdqqsd",
+    "email": "abderrazeqqxsqdsdqqccsdk@gmail.com",
     "password": "TestPassword123",
-    "first_name": "abderazek",
+    "password_confirm": "TestPassword123",
+    "first_name": "abderrazek",
     "last_name": "belhaj rhouma"
 }
 
@@ -32,4 +33,5 @@ Authorization: Token ff88d1b38bb39bed10a716cf9a080874126262f2
 ### ---------------------------- ###
 
 ### get jobs
-GET http://127.0.0.1:8000/api/v1/job-search/apec-job-search
+GET http://127.0.0.1:8000/api/v1/users/
+Content-Type: application/json

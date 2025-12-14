@@ -1,10 +1,10 @@
-import React, { JSX, useContext, useEffect, useState } from "react";
+import React, { useContext, useState } from "react";
 import { Home, Settings, FileText, Moon, Sun } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Avatar } from "@/components/ui/avatar";
 import { Separator } from "@/components/ui/separator";
 import { Link } from "react-router";
-import { ThemeProviderContext, useTheme } from "../ui/theme-provider";
+import { ThemeProviderContext } from "../ui/theme-provider";
 
 type NavKey = "dashboard" | "settings" | "cv";
 
@@ -15,22 +15,6 @@ interface SidebarProps {
 export default function Sidebar({ initial = "dashboard" }: SidebarProps) {
   const [active, setActive] = useState<NavKey>(initial);
   const { theme, setTheme } = useContext(ThemeProviderContext);
-  // const [dark, setDark] = useState<boolean>(() =>
-  //   typeof window !== "undefined"
-  //     ? document.documentElement.classList.contains("dark")
-  //     : false
-  // );
-
-  // useEffect(() => {
-  //   // keep html.dark in sync
-  //   if (dark) document.documentElement.classList.add("dark");
-  //   else document.documentElement.classList.remove("dark");
-  // }, [dark]);
-
-  // function navigate(key: NavKey) {
-  //   setActive(key);
-  //   onNavigate?.(key);
-  // }
 
   const navItemBase =
     "flex items-center gap-3 px-3 py-2 rounded-md transition-colors text-sm font-medium focus:outline-none focus:ring-2 focus:ring-offset-2";
@@ -40,6 +24,11 @@ export default function Sidebar({ initial = "dashboard" }: SidebarProps) {
 
   const navItemInactive =
     "text-slate-700 hover:bg-slate-100 dark:text-slate-300 dark:hover:bg-slate-800/60";
+
+  const logout = () => {
+    localStorage.removeItem("authToken");
+    // implement logout logic here
+  };
 
   return (
     <aside
@@ -135,8 +124,8 @@ export default function Sidebar({ initial = "dashboard" }: SidebarProps) {
           </div>
         </div>
 
-        <div className="mt-3 flex items-center justify-between gap-3">
-          <Link to="#" className="w-full" onClick={() => alert("Sign out")}>
+        <div className="mt-3 flex items-center justify-between gap-3 text-red-600 dark:text-red-400">
+          <Link to="/login" className="w-full" onClick={logout}>
             Log out
           </Link>
         </div>

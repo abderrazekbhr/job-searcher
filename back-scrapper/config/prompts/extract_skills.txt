@@ -1,8 +1,7 @@
-Based on the following job description, extract the required soft skills and hard skills.
+Based on the following job description, extract the required skills.
 Return the result strictly in the following JSON structure:
 {{
-  "soft_skills": ["list of soft skills here"],
-  "hard_skills": ["list of hard skills here"]
+  "skills": ["list of soft skills here"],
 }}
 
 Job description: {description}
