@@ -2,17 +2,17 @@ from django.db import models
 
 # Create your models here.
 
-class Entreprise(models.Model):
-    name=models.CharField(max_length=255,primary_key=True)
-    sector=models.CharField(max_length=255,blank=True)
-    other_details=models.TextField( )
+# class Entreprise(models.Model):
+#     name=models.CharField(max_length=255,primary_key=True)
+#     sector=models.CharField(max_length=255,blank=True)
+#     description=models.TextField( )
     
     
-    def __str__(self):
-        return f"{self.name} -> {self.sector}"
+#     def __str__(self):
+#         return f"{self.name} -> {self.sector}"
         
-    class Meta:
-        db_table="entreprises"
+#     class Meta:
+#         db_table="entreprises"
         
         
 class Job(models.Model):
@@ -24,12 +24,10 @@ class Job(models.Model):
     location = models.CharField(max_length=255)
     published_date = models.CharField(max_length=255)
     platform=models.CharField(max_length=255)
-    enterprise =models.ForeignKey(
-        Entreprise,related_name='jobs',on_delete=models.CASCADE,blank=True
-    ) 
+    enterprise =models.CharField(max_length=255)
     skills=models.JSONField( blank=True)
-    link=models.TextField(blank=True)
-    other_details = models.TextField()
+    link=models.TextField(blank=True,unique=True)
+    description = models.TextField()
     
     def __str__(self):
         return f"{self.title} at {self.enterprise} in {self.location}"

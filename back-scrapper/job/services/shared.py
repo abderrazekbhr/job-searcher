@@ -6,6 +6,7 @@ PROMPT_PATH="config/prompts"
 
 llm=PromptConfig(
     path=PROMPT_PATH
+    
 )
 
 def load_cv_from_file(file_path: str) -> str:
