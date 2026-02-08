@@ -22,15 +22,27 @@ user_service=UserService()
 
 @api_view(["GET"])
 @permission_classes([AllowAny])
-def confirm_creation(request: Request,user_key:str):
-    if cache.has_key(user_key):
-        email = cache.get(user_key)
-        user = get_object_or_404(User, email=email)
-        user.is_active = True
-        user.save()
-        cache.delete(user_key)
-        return Response("Account confirmed successfully",status=status.HTTP_200_OK)
-    return Response("Invalid confirmation key",status=status.HTTP_400_BAD_REQUEST)
+def confirm_creation(request: Request,email:str):
+    user = get_object_or_404(User, email=email)
+    if user.is_active:
+        return Response("Account is already confirmed",status=status.HTTP_200_OK)
+    
+    user.is_active = True
+    user.save()
+    return Response("Account confirmed successfully",status=status.HTTP_200_OK)
+
+# def confirm_creation(request: Request,user_key:str):
+#     if cache.has_key(user_key):
+#         email = cache.get(user_key)
+#         user = get_object_or_404(User, email=email)
+#         user.is_active = True
+#         user.save()
+#         cache.delete(user_key)
+#         return Response("Account confirmed successfully",status=status.HTTP_200_OK)
+#     return Response("Invalid confirmation key",status=status.HTTP_400_BAD_REQUEST)
+
+
+
 
 
 @api_view(["POST"])
@@ -50,6 +62,16 @@ def login(request:Request):
         return Response("check your email and password",status=status.HTTP_401_UNAUTHORIZED)
     
     return Response("email and password are obligatory",status=status.HTTP_400_BAD_REQUEST)
+
+@api_view(["POST"])
+@permission_classes([IsAuthenticated])
+def logout(request:Request):
+    auth_token=request.auth
+    token=Token.objects.filter(key=auth_token.key).first()
+    if token:
+        token.delete()
+        return Response("Logged out successfully",status=status.HTTP_200_OK)
+    return Response("User is not logged in",status=status.HTTP_400_BAD_REQUEST)
 
 
 class CreateUsers(generics.CreateAPIView):
@@ -79,7 +101,6 @@ class DeleteMultipleUsers(generics.DestroyAPIView):
         return Response(
             f"all users was deleted (number of users ={nb_user})",status=status.HTTP_204_NO_CONTENT            
         )    
-    # permission_classes=[IsAuthenticated,IsStaffPermission]
 
 
 class CacheContent(APIView):
@@ -94,3 +115,11 @@ class ListUsers(generics.ListAPIView):
     authentication_classes = [TokenAuthentication]
     permission_classes=[AllowAny]
 
+
+
+class ShowAllTokens(generics.GenericAPIView):
+    permission_classes=[AllowAny]
+    
+    def get(self,request:Request,*args,**kwargs):
+        tokens = Token.objects.all()
+        return Response([token.key for token in tokens],status=status.HTTP_200_OK)
