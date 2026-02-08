@@ -13,7 +13,7 @@ from rest_framework.authentication import TokenAuthentication
 from rest_framework.authtoken.models import Token
 from rest_framework.decorators import api_view,permission_classes
 
-from .serializer import RegisterDataSerializer
+from .serializer import RegisterDataSerializer,UserSerializer
 from .permissions import IsStaffPermission
 from .services import UserService
 from .models import User
@@ -88,8 +88,9 @@ class CacheContent(APIView):
 
 
 class ListUsers(generics.ListAPIView):
-    serializer_class=RegisterDataSerializer
+    serializer_class=UserSerializer
     queryset = User.objects.all()
+    
     authentication_classes = [TokenAuthentication]
     permission_classes=[AllowAny]
 

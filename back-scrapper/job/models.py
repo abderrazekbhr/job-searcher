@@ -28,6 +28,7 @@ class Job(models.Model):
     skills=models.JSONField( blank=True)
     link=models.TextField(blank=True,unique=True)
     description = models.TextField()
+    condidate=models.BooleanField(default=False)
     
     def __str__(self):
         return f"{self.title} at {self.enterprise} in {self.location}"

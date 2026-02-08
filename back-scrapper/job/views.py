@@ -4,7 +4,7 @@ from rest_framework import status,generics
 from rest_framework.request import Request
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
-
+from rest_framework.permissions import AllowAny,IsAuthenticated
 from .serializers import JobSerializer,QuestionSerializer
 from .models import Job
 from .services.shared import llm
@@ -52,9 +52,13 @@ class AskQuestionTesting(generics.GenericAPIView):
         question.is_valid(raise_exception=True)
         return Response(data=llm.testing(question),status=status.HTTP_200_OK)
 
-
-
 class JobList(generics.ListAPIView):
     serializer_class=JobSerializer
     queryset=Job.objects.all()
-    
+    permission_classes=[AllowAny]
+
+
+@api_view(['GET'])
+def number_of_jobs(request:Request):
+    num_jobs = Job.objects.count()
+    return Response({'number_of_jobs': num_jobs}, status=status.HTTP_200_OK)

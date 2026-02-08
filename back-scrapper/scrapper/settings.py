@@ -126,14 +126,14 @@ CORS_ALLOW_HEADERS = [
 # }
 
 REST_FRAMEWORK = {
+    "DEFAULT_PAGINATION_CLASS": "rest_framework.pagination.PageNumberPagination",
+    "PAGE_SIZE": 2,
     'DEFAULT_PERMISSION_CLASSES': [
         'rest_framework.permissions.IsAuthenticated',
     ],
     'DEFAULT_AUTHENTICATION_CLASSES': [
         'rest_framework.authentication.TokenAuthentication',
     ],
-    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.LimitOffsetPagination',
-    'PAGE_SIZE': 20
 }
 
 DATABASES = {
@@ -198,12 +198,6 @@ STATICFILES_DIRS = [
 ]
 
 
-# DRF and drf-spectacular settings and visualise api openAPI
-REST_FRAMEWORK = {
-    # Use drf-spectacular as the default schema generator
-    "DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema",
-    # autres réglages DRF...
-}
 
 SPECTACULAR_SETTINGS = {
     "TITLE": "Mon API",

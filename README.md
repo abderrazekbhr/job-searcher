@@ -5,6 +5,7 @@ A comprehensive Django REST API application that automates job scraping from APE
 ## 📋 Overview
 
 This application provides an intelligent job search platform that:
+
 - Scrapes job postings from APEC using Playwright
 - Stores and manages job listings in a PostgreSQL database
 - Uses Google Gemini AI to extract skills and generate job titles from CVs
@@ -15,18 +16,21 @@ This application provides an intelligent job search platform that:
 ## ✨ Features
 
 ### Job Scraping & Management
+
 - **APEC Job Scraper**: Automated scraping of job postings with configurable filters (keywords, contract type, experience level)
 - **Job Storage**: Persistent storage of job details including title, salary, location, skills, and company information
 - **AI Skill Extraction**: Uses Gemini AI to analyze job descriptions and extract required skills
 - **Cover Letter Generation**: Template-based cover letter creation with PDF CV parsing
 
 ### User Management
+
 - **User Registration**: Account creation with email confirmation workflow
 - **Token Authentication**: Secure REST API access using DRF token authentication
 - **Profile Management**: User profiles with CV upload and job preferences
 - **Email Notifications**: Automated confirmation emails via Gmail SMTP
 
 ### API & Documentation
+
 - **OpenAPI/Swagger Documentation**: Interactive API documentation using drf-spectacular
 - **RESTful Endpoints**: Well-structured API for users and job search operations
 - **CORS Support**: Configurable cross-origin resource sharing
@@ -56,57 +60,57 @@ This application provides an intelligent job search platform that:
 
 1. Clone the repository:
 
-    ```bash
-    git clone https://github.com/abderrazekbhr/job-searcher.git
-    cd django-app-scrapper
-    ```
+   ```bash
+   git clone https://github.com/abderrazekbhr/job-searcher.git
+   cd django-app-scrapper
+   ```
 
 1. Create a .env file with your API keys:
 
-    ```bash
-    echo "API_KEY=your_openrouter_api_key" > .env
-    ```
+   ```bash
+   echo "API_KEY=your_openrouter_api_key" > .env
+   ```
 
 1. Build and run with Docker:
 
-    ```bash
-    docker build -t job-searcher .
-    docker run -p 8000:8000 job-searcher
-    ```
+   ```bash
+   docker build -t job-searcher .
+   docker run -p 8000:8000 job-searcher
+   ```
 
 ### Manual Setup
 
 1. Create a virtual environment:
 
-    ```bash
-    python -m venv venv
-    source venv/bin/activate  # On Windows: venv\Scripts\activate
-    ```
+   ```bash
+   python -m venv venv
+   source venv/bin/activate  # On Windows: venv\Scripts\activate
+   ```
 
 1. Install dependencies:
 
-    ```bash
-    pip install -r requirements.txt
-    ```
+   ```bash
+   pip install -r requirements.txt
+   ```
 
 1. Install Playwright browsers:
 
-    ```bash
-    playwright install
-    ```
+   ```bash
+   playwright install
+   ```
 
 1. Run migrations:
 
-    ```bash
-    cd scrapper
-    python manage.py migrate
-    ```
+   ```bash
+   cd scrapper
+   python manage.py migrate
+   ```
 
 1. Start the development server:
 
-    ```bash
-    python manage.py runserver
-    ```
+   ```bash
+   python manage.py runserver
+   ```
 
 ## 📚 API Endpoints
 
