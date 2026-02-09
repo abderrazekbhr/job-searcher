@@ -25,7 +25,7 @@ apec_scrapper=ApecJobScraper()
 @api_view(['GET'])
 def apec_job_search_view(request:Request,nb_jobs:int=30):
     token=request.auth
-    email=request.get('email')
+    email=request.query_params.get('email')
     user=get_object_or_404(User,email=email)
     
     if token is None or user is None:
@@ -34,12 +34,12 @@ def apec_job_search_view(request:Request,nb_jobs:int=30):
     if not user.is_active:
         return Response({'error': 'User account is not active'}, status=status.HTTP_403_FORBIDDEN)
     
-    job_preferences = user.job_preferences
+    job_preferences = user.job_preferences or ["Développeur Full Stack"]
     
     scarpped_jobs=[]
-    for job_title in job_preferences:
-        logger.info(f"User {user.email} has job preference: {job_title}")
-        jobs = apec_scrapper.search_jobs(max_jobs=nb_jobs,job_title=job_title)
+    for jt in job_preferences:
+        logger.info(f"User {user.email} has job preference: {jt}")
+        jobs = apec_scrapper.search_jobs(max_jobs=nb_jobs,keywords=jt)
         scarpped_jobs.extend(jobs)
     
     
@@ -51,6 +51,7 @@ def apec_job_search_view(request:Request,nb_jobs:int=30):
             serializer.save()
             saved_jobs.append(job)
         else:
+            print(f"Failed to save job: {serializer.errors}")
             error_jobs.append(job)
     return Response({
         'saved_job':saved_jobs,
@@ -79,7 +80,6 @@ class JobList(generics.ListAPIView):
     serializer_class=JobSerializer
     queryset=Job.objects.all()
     filter_backends = [django_filters.rest_framework.DjangoFilterBackend]
-
     permission_classes=[AllowAny]
 
 

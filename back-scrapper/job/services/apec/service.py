@@ -120,7 +120,7 @@ class ScraperService:
             "experience_level": self._safe_get_text(description_divs, 2),
             "published_date": self._safe_extract(
                 page.locator(".date-offre.mb-10").text_content
-            ),
+            ).replace("Publié le ", "").strip(),
             "enterprise": self._safe_list_get(list_detail_offre, 0),
             "platform": "APEC",
             "location": self._safe_list_get(list_detail_offre, 2),
